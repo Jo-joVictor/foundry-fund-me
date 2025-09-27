@@ -1,200 +1,176 @@
-# 🏫 School DAO
+# FundMe Smart Contract
 
-A decentralized autonomous organization (DAO) for educational institutions, enabling democratic governance, transparent fee payments, and token-based incentives for staff members.
+A decentralized crowdfunding smart contract built with Solidity and Foundry that accepts ETH donations with USD-based minimum requirements using Chainlink price feeds.
 
-## 📋 Overview
+## Features
 
-School DAO is a comprehensive blockchain solution that modernizes school governance through:
-- **Democratic Voting**: Staff members vote on proposals using governance tokens
-- **Transparent Fee Payments**: Students pay school fees directly on-chain
-- **Staff Incentives**: Token airdrops for educational staff members
-- **Decentralized Decision Making**: Community-driven school policy changes
+- **USD-based funding**: Minimum $50 funding requirement enforced through Chainlink price feeds
+- **Real-time price conversion**: ETH to USD conversion using Chainlink oracles
+- **Owner-controlled withdrawals**: Only contract owner can withdraw collected funds
+- **Gas optimization**: Two withdrawal methods (standard and gas-optimized)
+- **Multi-network support**: Deployable on Ethereum mainnet, Sepolia, Goerli, and local networks
+- **Comprehensive testing**: Unit, integration, and deployment tests included
 
-## 🚀 Features
-
-### 🗳️ Governance System
-- Proposal creation for school policy changes
-- Token-weighted voting mechanism
-- Timelock controller for secure execution
-- Quorum requirements for proposal validation
-
-### 💰 Fee Payment System
-- On-chain school fee payments
-- Transparent transaction records
-- Configurable fee structures
-- Automatic refund handling
-
-### 🎁 Staff Airdrop
-- Merkle tree-based token distribution
-- Cryptographic proof verification
-- One-time claim mechanism
-- Staff member eligibility checking
-
-### 🌐 Frontend Interface
-- MetaMask wallet integration
-- Responsive web design
-- Real-time balance updates
-- Intuitive governance dashboard
-
-## 🛠️ Technology Stack
-
-### Smart Contracts
-- **Solidity ^0.8.20**
-- **OpenZeppelin Contracts** (Governor, ERC20Votes, TimelockController)
-- **Merkle Proof** for airdrop verification
-
-### Frontend
-- **React** with modern hooks
-- **Tailwind CSS** for styling
-- **Lucide React** icons
-- **Native Web3** integration
-
-### Blockchain
-- **Ethereum Sepolia Testnet**
-- **MetaMask** wallet support
-
-## 📦 Contract Architecture
-
-```
-├── SchoolGovernor.sol      # Main governance contract
-├── VotingToken.sol         # ERC20 voting token (SVT)
-├── SchoolConfig.sol        # Fee management & configuration
-├── Timelock.sol           # Execution delay controller
-└── Airdrop.sol            # Staff token distribution
-```
-
-## 🔧 Installation & Setup
+## Quick Start
 
 ### Prerequisites
-- Node.js 16+ and npm
-- MetaMask browser extension
-- Sepolia ETH for transactions
 
-### Frontend Setup
-1. Clone the repository:
+- [Foundry](https://book.getfoundry.sh/getting-started/installation)
+- [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+
+### Installation
+
 ```bash
-git clone https://github.com/yourusername/school-dao.git
-cd school-dao
+git clone <your-repo-url>
+cd foundry-fundme
+make install
 ```
 
-2. Install dependencies:
+### Environment Setup
+
+Create a `.env` file:
 ```bash
-npm install
+SEPOLIA_RPC_URL=your_sepolia_rpc_url
+PRIVATE_KEY=your_private_key
+ETHERSCAN_API_KEY=your_etherscan_api_key
 ```
 
-3. Update contract addresses in the frontend:
-```javascript
-const CONTRACT_ADDRESSES = {
-  governance: "0x...",      // Your deployed governance contract
-  schoolConfig: "0x...",    // Your deployed school config contract  
-  votingToken: "0x...",     // Your deployed voting token contract
-  airdrop: "0x..."          // Your deployed airdrop contract
-};
-```
+## Usage
 
-4. Start the development server:
+### Deploy
+
 ```bash
-npm start
+# Deploy to local anvil
+make deploy
+
+# Deploy to Sepolia testnet
+make deploy ARGS="--network sepolia"
 ```
 
-## 🎯 Usage Guide
+### Fund the Contract
 
-### For Staff Members (Governance Participants)
-1. **Connect Wallet**: Use MetaMask to connect to the application
-2. **Delegate Voting Power**: Self-delegate to activate your voting power
-3. **Create Proposals**: Submit proposals for school policy changes
-4. **Vote on Proposals**: Cast votes (For/Against/Abstain) on active proposals
-5. **Claim Airdrop**: Claim your allocated governance tokens
+```bash
+# Using Forge scripts
+make fund ARGS="--network sepolia"
 
-### For Students (Fee Payers)
-1. **Connect Wallet**: Connect your MetaMask wallet
-2. **View Current Fee**: Check the current school fee amount
-3. **Pay Fees**: Submit fee payment directly on-chain
-4. **Transaction Confirmation**: Receive blockchain confirmation
-
-### For Administrators
-1. **Monitor Proposals**: Track all governance proposals and votes
-2. **Execute Proposals**: Execute successful proposals after timelock
-3. **Update Configuration**: Modify school settings through governance
-
-## 🏛️ Governance Process
-
-1. **Proposal Creation**: Staff members create proposals for school changes
-2. **Voting Period**: 1-week voting window for all participants
-3. **Quorum Check**: Minimum 3 votes required for proposal validity
-4. **Timelock Queue**: Successful proposals enter timelock period
-5. **Execution**: Approved proposals automatically execute
-
-## 🎁 Airdrop Mechanism
-
-The staff airdrop uses a Merkle tree for efficient and secure token distribution:
-
-- **Eligibility**: Pre-approved staff member addresses
-- **Amount**: 1000 SVT tokens per eligible staff member
-- **Proof**: Cryptographic merkle proofs for verification
-- **Security**: Signature-based claim validation
-
-## 🔐 Security Features
-
-- **Multi-signature** governance execution
-- **Timelock delays** for critical changes
-- **Merkle proof** verification for airdrops
-- **Reentrancy protection** on all contracts
-- **Access control** for administrative functions
-
-## 📊 Contract Addresses (Sepolia)
-
-Update these with your deployed contract addresses:
-
-```
-Governance Contract: 0x...
-School Config: 0x...
-Voting Token (SVT): 0x...
-Airdrop Contract: 0x...
-Timelock Controller: 0x...
+# Using Cast directly
+make cast-fund
 ```
 
-## 🧪 Testing
+### Withdraw Funds (Owner Only)
 
-The contracts have been tested and deployed on Sepolia testnet. Key test scenarios include:
+```bash
+# Using Forge scripts
+make withdraw ARGS="--network sepolia"
 
-- ✅ Proposal creation and voting
-- ✅ Fee payment functionality  
-- ✅ Airdrop claiming mechanism
-- ✅ Governance execution via timelock
-- ✅ Token delegation and voting power
+# Using Cast directly  
+make cast-withdraw
+```
 
-## 🤝 Contributing
+### Check Contract Status
 
-Contributions are welcome! Please follow these steps:
+```bash
+# Check contract balance
+make cast-balance
+
+# Check owner address
+make cast-owner
+
+# Check current ETH price
+make cast-price
+
+# Check number of funders
+make cast-funders
+```
+
+## Contract Architecture
+
+### Core Contracts
+
+- **FundMe.sol**: Main crowdfunding contract
+- **PriceConverter.sol**: Library for ETH/USD price conversions using Chainlink
+
+### Deployment Scripts
+
+- **DeployFundMe.s.sol**: Main deployment script
+- **HelperConfig.s.sol**: Network configuration management
+- **Interactions.s.sol**: Contract interaction scripts
+
+### Key Functions
+
+- `fund()`: Accept ETH donations (minimum $50 USD equivalent)
+- `withdraw()`: Withdraw all funds (owner only)
+- `cheaperWithdraw()`: Gas-optimized withdrawal (owner only)
+- `getConversionRate(uint256)`: Convert ETH amount to USD
+- `getCurrentPrice()`: Get current ETH price in USD
+
+## Testing
+
+Run the complete test suite:
+
+```bash
+# Run all tests
+make test
+
+# Run tests with verbose output
+forge test -vvv
+
+# Run specific test files
+forge test --match-path test/unit/FundMeTest.t.sol
+forge test --match-path test/integration/InteractionsTest.t.sol
+```
+
+### Test Coverage
+
+- **Unit Tests**: Core contract functionality
+- **Integration Tests**: End-to-end interaction testing
+- **Deployment Tests**: Deployment script verification
+- **Mock Tests**: Local testing with price feed mocks
+
+## Network Configuration
+
+The contract supports multiple networks through HelperConfig:
+
+- **Ethereum Mainnet**: Uses live Chainlink ETH/USD feed
+- **Sepolia Testnet**: Uses Sepolia Chainlink ETH/USD feed
+- **Goerli Testnet**: Uses Goerli Chainlink ETH/USD feed
+- **Local Anvil**: Deploys mock price feeds for testing
+
+## Security Features
+
+- **Access Control**: Withdrawal restricted to contract owner
+- **Input Validation**: Minimum funding amount enforced
+- **Price Feed Integration**: Real-time price data prevents stale price exploits
+- **Custom Errors**: Gas-efficient error handling
+- **Reentrancy Protection**: Safe external calls pattern
+
+## Gas Optimization
+
+- Custom errors instead of require strings
+- Efficient storage patterns with mappings
+- Gas-optimized withdrawal function available
+- Immutable variables where applicable
+
+## Deployed Contracts
+
+### Sepolia Testnet
+- **FundMe Contract**: `0x383F4CFca357e2F9E1C9BaF69f0eaF24a1b8CA22`
+- **Verified on Etherscan**: [View Contract](https://sepolia.etherscan.io/address/0x383f4cfca357e2f9e1c9baf69f0eaf24a1b8ca22)
+
+## Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch
+3. Add tests for new functionality
+4. Ensure all tests pass
+5. Submit a pull request
 
-## 📄 License
+## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🔗 Links
+## Resources
 
-- **Frontend Demo**: [Live Demo](https://your-school-dao.vercel.app)
-- **Sepolia Testnet**: [Etherscan](https://sepolia.etherscan.io)
-- **Documentation**: [Governance Docs](./docs/governance.md)
-
-## ⚠️ Disclaimer
-
-This is experimental software. Use at your own risk. Not audited for mainnet deployment.
-
-## 📞 Support
-
-For questions and support:
-- Open an issue on GitHub
-- Join our [Discord community](https://discord.gg/your-invite)
-- Email: support@schooldao.org
-
----
-
-**Built with ❤️ for educational institutions embracing decentralized governance**
+- [Foundry Documentation](https://book.getfoundry.sh/)
+- [Chainlink Price Feeds](https://docs.chain.link/data-feeds/price-feeds)
+- [Solidity Documentation](https://docs.soliditylang.org/)
